@@ -15,7 +15,6 @@ public partial class MainWindow: Gtk.Window
 	public MainWindow (string url): base (Gtk.WindowType.Toplevel)
 	{
 		Build ();
-		ScrolledWindow scrollWindow = new ScrolledWindow();
 		webView = new ExposedWebView();
 		ExposedWebSettings settings = new ExposedWebSettings();
 		settings.g_object_set("user-agent", new GLib.Value("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:24.0) Gecko/20100101 Firefox/24.0"));
@@ -30,9 +29,8 @@ public partial class MainWindow: Gtk.Window
 		notifications.Elapsed += HandleElapsed;
 		notifications.Start();
 		webView.Open(url);
-		scrollWindow.Add(webView);
 		VBox vbox1 = new VBox();
-		vbox1.PackStart(scrollWindow);
+		vbox1.PackStart(webView);
 		this.Add(vbox1);
 		this.ShowAll();
 	}

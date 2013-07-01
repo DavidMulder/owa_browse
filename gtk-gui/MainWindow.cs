@@ -10,8 +10,8 @@ public partial class MainWindow
 		this.Name = "MainWindow";
 		this.Title = "";
 		this.WindowPosition = ((global::Gtk.WindowPosition)(4));
-		this.DefaultWidth = 1800;
-		this.DefaultHeight = 2100;
+		this.DefaultWidth = 1600;
+		this.DefaultHeight = 850;
 		if ((this.Child != null)) {
 			this.Child.ShowAll ();
 		}
