@@ -37,16 +37,24 @@ public partial class MainWindow: Gtk.Window
 		this.ShowAll();
 	}
 
+	void HandleCreateWebView (object o, CreateWebViewArgs args)
+	{
+		Window info = new Window("");
+		info.DefaultWidth = 1000;
+		info.DefaultHeight = 700;
+		VBox vbox2 = new VBox();
+		WebView child = new WebView();
+		vbox2.PackStart(child);
+		info.Add (vbox2);
+		info.ShowAll();
+		args.RetVal = child;
+	}
+
 	void HandleWebViewReady (object o, WebViewReadyArgs args)
 	{
 		Console.WriteLine("WebViewReady");
 	}
-
-	void HandleCreateWebView (object o, CreateWebViewArgs args)
-	{
-		Console.WriteLine("CreateWebView");
-	}
-
+	
 	void HandleNewWindowPolicyDecisionRequested (object o, NewWindowPolicyDecisionRequestedArgs args)
 	{
 		string URL = System.Web.HttpUtility.UrlDecode(Regex.Split(args.Request.Uri, "&URL=")[1]);
@@ -141,6 +149,7 @@ class ExposedWebView : WebKit.WebView {
 	[DefaultSignalHandler (Type = typeof(WebView), ConnectionMethod = "OverrideCreateWebView")]
 	protected virtual WebView OnCreateWebView (WebFrame frame)
 	{
+		ExposedWebView webView = new ExposedWebView();
 		Value empty = Value.Empty;
 		ValueArray valueArray = new ValueArray (2u);
 		Value[] array = new Value[2];
@@ -155,7 +164,7 @@ class ExposedWebView : WebKit.WebView {
 			Value value = array2 [i];
 			value.Dispose ();
 		}
-		return new ExposedWebView();
+		return webView;
 	}
 
 	[DefaultSignalHandler (Type = typeof(WebView), ConnectionMethod = "OverrideNewWindowPolicyDecisionRequested")]
