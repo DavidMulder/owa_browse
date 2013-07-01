@@ -4,11 +4,13 @@ using GLib;
 using WebKit;
 using System.Timers;
 using Notifications;
+using System.Text.RegularExpressions;
 
 public partial class MainWindow: Gtk.Window
 {
 	private Timer notifications = new Timer(2000);
 	private ExposedWebView webView;
+	private bool recent_notification = false;
 
 	public MainWindow (string url): base (Gtk.WindowType.Toplevel)
 	{
@@ -47,7 +49,8 @@ public partial class MainWindow: Gtk.Window
 
 	void HandleNewWindowPolicyDecisionRequested (object o, NewWindowPolicyDecisionRequestedArgs args)
 	{
-		Console.WriteLine(args.Request.Uri);	
+		string URL = System.Web.HttpUtility.UrlDecode(Regex.Split(args.Request.Uri, "&URL=")[1]);
+		System.Diagnostics.Process.Start(URL);
 	}
 	
 	void HandleNavigationRequested (object o, NavigationRequestedArgs args)
@@ -57,10 +60,16 @@ public partial class MainWindow: Gtk.Window
 
 	void HandleElapsed (object sender, ElapsedEventArgs e)
 	{
-		if (webView.SearchText ("Reminders", true, true, true)) {
-			Notification notify = new Notification("Outlook Notification", "");
+		if (recent_notification) {
+			notifications.Interval = 5000;
+			recent_notification = false;
+		}
+		if (!recent_notification && webView.SearchText ("Reminders", true, true, true)) {
+			Notification notify = new Notification ("Outlook Notification", "");
 			notify.Urgency = Urgency.Normal;
-			notify.Show();
+			notify.Show ();
+			recent_notification = true;
+			notifications.Interval = 30000;
 		}
 	}
 

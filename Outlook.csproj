@@ -46,6 +46,7 @@
     <Reference Include="notify-sharp">
       <HintPath>..\..\..\..\..\usr\lib\mono\notify-sharp\notify-sharp.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="gtk-gui\gui.stetic">
