@@ -43,6 +43,9 @@
     <Reference Include="webkit-sharp, Version=1.1.15.0, Culture=neutral, PublicKeyToken=eaa1d335d2e19745">
       <Private>False</Private>
     </Reference>
+    <Reference Include="notify-sharp">
+      <HintPath>..\..\..\..\..\usr\lib\mono\notify-sharp\notify-sharp.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="gtk-gui\gui.stetic">

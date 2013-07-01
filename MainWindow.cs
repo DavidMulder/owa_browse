@@ -3,6 +3,7 @@ using Gtk;
 using GLib;
 using WebKit;
 using System.Timers;
+using Notifications;
 
 public partial class MainWindow: Gtk.Window
 {
@@ -56,8 +57,10 @@ public partial class MainWindow: Gtk.Window
 
 	void HandleElapsed (object sender, ElapsedEventArgs e)
 	{
-		if (webView.SearchText ("divConvTopic", true, true, true)) {
-			Console.WriteLine ("Notification");
+		if (webView.SearchText ("Reminders", true, true, true)) {
+			Notification notify = new Notification("Outlook Notification", "");
+			notify.Urgency = Urgency.Normal;
+			notify.Show();
 		}
 	}
 
