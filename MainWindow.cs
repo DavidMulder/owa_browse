@@ -18,14 +18,11 @@ public partial class MainWindow: Gtk.Window
 		webView = new ExposedWebView();
 		ExposedWebSettings settings = new ExposedWebSettings();
 		settings.g_object_set("user-agent", new GLib.Value("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:24.0) Gecko/20100101 Firefox/24.0"));
-		settings.g_object_set("javascript-can-open-windows-automatically", new GLib.Value(true));
 		settings.g_object_set("enable-spell-checking", new GLib.Value(true));
 		webView.TitleChanged += HandleTitleChanged;
 		webView.Settings = settings;
-		webView.NavigationRequested += HandleNavigationRequested;
 		webView.NewWindowPolicyDecisionRequested += HandleNewWindowPolicyDecisionRequested;
 		webView.CreateWebView += HandleCreateWebView;
-		webView.WebViewReady += HandleWebViewReady;
 		notifications.Elapsed += HandleElapsed;
 		notifications.Start();
 		webView.Open(url);
@@ -42,26 +39,28 @@ public partial class MainWindow: Gtk.Window
 		info.DefaultHeight = 700;
 		VBox vbox2 = new VBox();
 		WebView child = new WebView();
+		child.NavigationRequested += HandleNavigationRequested1;
 		vbox2.PackStart(child);
 		info.Add (vbox2);
 		info.ShowAll();
 		args.RetVal = child;
 	}
 
-	void HandleWebViewReady (object o, WebViewReadyArgs args)
+	void HandleNavigationRequested1 (object o, NavigationRequestedArgs args)
 	{
-		Console.WriteLine("WebViewReady");
+		// Destroy the window if it was already opened in the browser
+		if (args.Request.Uri.Contains ("&URL=")) {
+			WebView self = (WebView)o;
+			VBox container = (VBox)self.Parent;
+			Window parent = (Window)container.Parent;
+			parent.Destroy();
+		}
 	}
 	
 	void HandleNewWindowPolicyDecisionRequested (object o, NewWindowPolicyDecisionRequestedArgs args)
 	{
 		string URL = System.Web.HttpUtility.UrlDecode(Regex.Split(args.Request.Uri, "&URL=")[1]);
 		System.Diagnostics.Process.Start(URL);
-	}
-	
-	void HandleNavigationRequested (object o, NavigationRequestedArgs args)
-	{
-		Console.WriteLine("NavigationRequested");
 	}
 
 	void HandleElapsed (object sender, ElapsedEventArgs e)
