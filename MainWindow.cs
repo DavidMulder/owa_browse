@@ -15,10 +15,10 @@ public partial class MainWindow: Gtk.Window
 	public MainWindow (string url): base (Gtk.WindowType.Toplevel)
 	{
 		Build ();
-		webView = new ExtendedWebView();
-		ExtendedWebSettings settings = new ExtendedWebSettings();
-		settings.g_object_set("user-agent", new GLib.Value("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:24.0) Gecko/20100101 Firefox/24.0"));
-		settings.g_object_set("enable-spell-checking", new GLib.Value(true));
+		webView = new ExtendedWebView ();
+		ExtendedWebSettings settings = new ExtendedWebSettings ();
+		settings.g_object_set ("user-agent", new GLib.Value ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:24.0) Gecko/20100101 Firefox/24.0"));
+		settings.g_object_set ("enable-spell-checking", new GLib.Value (true));
 		webView.TitleChanged += HandleTitleChanged;
 		webView.Settings = settings;
 		webView.NewWindowPolicyDecisionRequested += HandleNewWindowPolicyDecisionRequested;

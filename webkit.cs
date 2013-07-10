@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Runtime.InteropServices;
 using Gtk;
 using GLib;
@@ -21,9 +22,28 @@ namespace WebKit
 		}
 	}
 
-	class DOMNodeList : GLib.Object
+	// http://www.opensource.apple.com/source/WebKit/WebKit-7533.16/gtk/tests/testdomdocument.c
+	class DOMNodeList: GLib.Object, IEnumerable
 	{
 		public DOMNodeList (IntPtr raw) : base (raw) {}
+
+		[DllImport ("webkit-1.0")]
+		private static extern IntPtr webkit_dom_node_list_item (IntPtr raw, int element);
+
+		[DllImport ("webkit-1.0")]
+		private static extern int webkit_dom_node_list_get_length (IntPtr raw);
+
+		public IEnumerator GetEnumerator ()
+		{
+			for (int i = 0; i < webkit_dom_node_list_get_length(base.Handle); i++) {
+				yield return new DOMNode(webkit_dom_node_list_item(base.Handle, i));
+			}
+		}
+	}
+
+	class DOMNode : GLib.Object
+	{
+		public DOMNode (IntPtr raw) : base (raw) {}
 
 
 	}
