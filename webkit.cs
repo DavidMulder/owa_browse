@@ -48,6 +48,27 @@ namespace WebKit
 
 	}
 
+	class DOMElement : GLib.Object
+	{
+		public DOMElement (IntPtr raw) : base (raw) {}
+		
+		
+	}
+
+	class DOMHTMLElement : GLib.Object
+	{
+		public DOMHTMLElement (IntPtr raw) : base (raw) {}
+		
+		[DllImport ("webkit-1.0")]
+		private static extern IntPtr webkit_dom_html_element_get_inner_text(IntPtr raw);
+
+		public string get_inner_text ()
+		{
+			IntPtr data = webkit_dom_html_element_get_inner_text(base.Handle);
+			return Marshaller.PtrToStringGFree(data);
+		}
+	}
+
 	class ExtendedWebSettings : WebKit.WebSettings {
 		public void g_object_set(string name, GLib.Value value) {
 			SetProperty(name, value);
