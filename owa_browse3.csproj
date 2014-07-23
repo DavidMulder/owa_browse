@@ -5,10 +5,10 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{009A8E42-02B0-44FF-81DB-E2E3D767E2AD}</ProjectGuid>
+    <ProjectGuid>{C62D8977-CE3E-4CFC-96E0-D4DA63C0F8CB}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Outlook</RootNamespace>
-    <AssemblyName>Outlook</AssemblyName>
+    <RootNamespace>owa_browse3</RootNamespace>
+    <AssemblyName>owa_browse3</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>True</DebugSymbols>
@@ -34,32 +34,38 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="Mono.Posix" />
-    <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="glib-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="glade-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="pango-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="atk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="webkit-sharp, Version=1.1.15.0, Culture=neutral, PublicKeyToken=eaa1d335d2e19745">
-      <Private>False</Private>
+    <Reference Include="atk-sharp">
+      <HintPath>..\..\..\..\usr\lib\mono\gtk-sharp-3.0\atk-sharp.dll</HintPath>
     </Reference>
-    <Reference Include="notify-sharp">
-      <HintPath>..\..\..\..\..\usr\lib\mono\notify-sharp\notify-sharp.dll</HintPath>
+    <Reference Include="gdk-sharp">
+      <HintPath>..\..\..\..\usr\lib\mono\gtk-sharp-3.0\gdk-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="gtk-sharp">
+      <HintPath>..\..\..\..\usr\lib\mono\gtk-sharp-3.0\gtk-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="pango-sharp">
+      <HintPath>..\..\..\..\usr\lib\mono\gtk-sharp-3.0\pango-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="glib-sharp">
+      <HintPath>..\..\..\..\usr\lib\mono\gtk-sharp-3.0\glib-sharp.dll</HintPath>
     </Reference>
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="gtk-gui\gui.stetic">
-      <LogicalName>gui.stetic</LogicalName>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="gtk-gui\generated.cs" />
     <Compile Include="MainWindow.cs" />
-    <Compile Include="gtk-gui\MainWindow.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="webkit.cs" />
+    <Compile Include="..\webkit-sharp3\WebKit.cs">
+      <Link>WebKit.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Content Include="app.desktop">
+      <DeployService-TargetDirectoryId>Linux.DesktopApplications</DeployService-TargetDirectoryId>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="g_object_link.cpp" />
+  </ItemGroup>
 </Project>

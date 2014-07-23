@@ -6,16 +6,12 @@
   </configuration>
   <import>
     <widget-library name="glade-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <widget-library name="../bin/Debug/Outlook.exe" internal="true" />
-    <widget-library name="webkit-sharp, Version=1.1.15.0, Culture=neutral, PublicKeyToken=eaa1d335d2e19745" />
-    <widget-library name="../../../../../../usr/lib/mono/notify-sharp/notify-sharp.dll" />
+    <widget-library name="../bin/Debug/owa_browse3.exe" internal="true" />
   </import>
   <widget class="Gtk.Window" id="MainWindow" design-size="400 300">
     <property name="MemberName" />
-    <property name="Title" translatable="yes" />
+    <property name="Title" translatable="yes">MainWindow</property>
     <property name="WindowPosition">CenterOnParent</property>
-    <property name="DefaultWidth">1600</property>
-    <property name="DefaultHeight">850</property>
     <signal name="DeleteEvent" handler="OnDeleteEvent" />
     <child>
       <placeholder />

@@ -1,7 +1,7 @@
 using System;
 using Gtk;
 
-namespace Outlook
+namespace owa_browse3
 {
 	class MainClass
 	{
