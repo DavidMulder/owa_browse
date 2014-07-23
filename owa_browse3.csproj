@@ -65,7 +65,4 @@
       <DeployService-TargetDirectoryId>Linux.DesktopApplications</DeployService-TargetDirectoryId>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="g_object_link.cpp" />
-  </ItemGroup>
 </Project>
