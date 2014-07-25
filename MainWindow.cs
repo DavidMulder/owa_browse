@@ -20,11 +20,15 @@ public class MainWindow: Window
 		WebSettings settings = new WebSettings ();
 		settings.user_agent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:15.0) Gecko/20120427 Firefox/15.0a1";
 		settings.enable_spell_checking = true;
-		HandlerSignalArgsDelegate HandleTitleChangedDelegate = HandleTitleChanged;
-		webView.TitleChanged = HandleTitleChangedDelegate;
+		HandlerSignalArgsDelegate documentLoadFinishedDelegate = HandleDocumentLoadFinished;
+		webView.DocumentLoadFinished = documentLoadFinishedDelegate;
 		webView.settings = settings;
 		HandlerSignalArgsDelegate createWebViewDelegate = HandleCreateWebView;
 		webView.CreateWebView = createWebViewDelegate;
+		HandlerSignalArgsDelegate newWindowPolicyDecisionRequestedHandler = HandleNewWindowPolicyDecisionRequested;
+		webView.NewWindowPolicyDecisionRequested = newWindowPolicyDecisionRequestedHandler;
+		HandlerSignalArgsDelegate navigationRequstedHandler = HandleNavigationRequested;
+		webView.NavigationRequested = navigationRequstedHandler;
 		webView.open(url);
 		VBox vbox1 = new VBox();
 		vbox1.PackStart(webView, true, true, 0);
@@ -41,6 +45,16 @@ public class MainWindow: Window
 		checkmail();
 	}
 
+	void HandleNewWindowPolicyDecisionRequested (object o, SignalArgs args)
+	{
+		NetworkRequest request = new NetworkRequest (((GLib.Object)args.Args [1]).Handle);
+		string request_uri = request.Uri;
+		if (request_uri.Contains ("&URL=")) {
+			string URL = System.Web.HttpUtility.UrlDecode (Regex.Split (request_uri, "&URL=") [1]);
+			System.Diagnostics.Process.Start (URL);
+		}
+	}
+
 	void HandleCreateWebView (object o, SignalArgs args)
 	{
 		Window info = new Window("");
@@ -48,12 +62,28 @@ public class MainWindow: Window
 		info.DefaultHeight = 700;
 		VBox vbox2 = new VBox();
 		WebView child = new WebView();
+		HandlerSignalArgsDelegate navigationRequstedHandler = HandleNavigationRequested;
+		child.NavigationRequested = navigationRequstedHandler;
 		HandlerSignalArgsDelegate closeWebViewDelegate = HandleCloseWebView;
 		child.CloseWebView = closeWebViewDelegate;
 		vbox2.PackStart(child, true, true, 0);
 		info.Add (vbox2);
 		info.ShowAll();
 		args.RetVal = child;
+	}
+
+	void HandleNavigationRequested (object o, SignalArgs args)
+	{
+		NetworkRequest request = new NetworkRequest(((GLib.Object)args.Args [1]).Handle);
+		string request_uri = request.Uri;
+		// Destroy the window if it was already opened in the browser
+		if (request_uri.Contains ("&URL=")) {
+			WebView self = (WebView)o;
+			VBox container = (VBox)self.Parent;
+			Window parent = (Window)container.Parent;
+			parent.Destroy();
+			args.RetVal = 1;
+		}
 	}
 
 	void HandleCloseWebView (object o, EventArgs args)
@@ -78,6 +108,7 @@ public class MainWindow: Window
 
 	private void disable_header ()
 	{
+		System.Threading.Thread.Sleep(500);
 		DOMDocument doc = webView.get_dom_document ();
 		DOMElement divBrandLogo = doc.get_element_by_id ("divBrandLogo");
 		divBrandLogo.set_attribute("style", "display:none");
@@ -107,7 +138,7 @@ public class MainWindow: Window
 		Console.WriteLine("There is new mail"); //temporary
 	}
 
-	void HandleTitleChanged (object o, EventArgs args)
+	void HandleDocumentLoadFinished (object o, EventArgs args)
 	{
 		disable_header();
 	}
